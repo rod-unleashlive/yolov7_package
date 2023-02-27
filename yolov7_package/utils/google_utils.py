@@ -8,22 +8,12 @@ from pathlib import Path
 
 import requests
 import torch
-import wget
 
 
 def gsutil_getsize(url=''):
     # gs://bucket/file size https://cloud.google.com/storage/docs/gsutil/commands/du
     s = subprocess.check_output(f'gsutil du {url}', shell=True).decode('utf-8')
     return eval(s.split(' ')[0]) if len(s) else 0  # bytes
-
-
-def attempt_download(file):
-    # Attempt file download if does not exist
-    file_name = file
-    file = Path(str(file).strip().replace("'", '').lower())
-
-    if not file.exists():
-        wget.download(f'https://github.com/WongKinYiu/yolov7/releases/download/v0.1/{file.name}', out=str(file.parent))
 
 
 def gdrive_download(id='', file='tmp.zip'):

@@ -19,7 +19,6 @@ from .utils.datasets import create_dataloader
 from .utils.general import non_max_suppression, non_max_suppression_kpt, check_dataset, init_seeds, one_cycle, \
     check_img_size, colorstr
 from .utils.torch_utils import TracedModel, torch_distributed_zero_first, ModelEMA
-from .load_utils import load_script_model
 
 
 def conf2color(conf):
@@ -147,7 +146,7 @@ class Yolov7Detector:
             self.model = attempt_load([weights], map_location=self.device)  # load FP32 model
         else:
             if not os.path.isfile(weights):
-                load_script_model(weights)
+                raise FileNotFoundError("The weights provided cannot be found.")
             self.model = torch.jit.load(weights, map_location=self.device).float().eval()
 
         self.traced = traced
